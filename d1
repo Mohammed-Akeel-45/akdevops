@@ -1,0 +1,159 @@
+GitHub – Create an Account and Fork Your Application Code
+Forking means creating your own copy of someone else's repository in your GitHub account. This allows you to make changes without affecting the original repository.
+
+Step 1: Open GitHub Website
+Go to:
+GitHub Official Website
+Explanation
+GitHub is a cloud-based platform used for storing source code, collaborating with developers, tracking changes, and managing software projects using Git.
+
+Step 2: Create a GitHub Account
+
+
+Click Sign Up.
+
+
+Enter:
+
+
+Email address
+
+
+Password
+
+
+Username
+
+
+
+
+Complete the verification process.
+
+
+Click Create Account.
+
+
+Explanation
+A GitHub account provides a personal workspace where repositories, projects, and code can be stored and managed.
+
+Step 3: Verify Your Email
+
+
+GitHub sends a verification email.
+
+
+Open your inbox.
+
+
+Click Verify Email Address.
+
+
+Explanation
+Email verification activates the account and enables access to all GitHub features.
+
+Step 4: Sign In to GitHub
+
+
+Visit:
+https://github.com/login
+
+
+Enter:
+
+
+Username or email
+
+
+Password
+
+
+
+
+Click Sign In.
+
+
+Explanation
+Logging in provides access to repositories, projects, and account settings.
+
+Step 5: Open the Application Repository
+Suppose the application code repository is:
+https://github.com/Narendra500/project-management
+Open the repository in your browser.
+Explanation
+A repository contains all files, folders, source code, and version history of a project.
+
+Step 6: Click the Fork Button
+At the top-right corner of the repository page, click:
+Fork
+Explanation
+Forking creates a copy of the repository under your own GitHub account. The original repository remains unchanged.
+
+Step 7: Select Your Account
+GitHub may ask where the fork should be created.
+Choose:
+Your GitHub Account
+Example:
+Mohammed-Akeel-45
+Then click:
+Create Fork
+Explanation
+GitHub duplicates the entire repository, including branches and commit history, into your account.
+
+Step 8: Wait for Fork Creation
+GitHub creates a new repository such as:
+https://github.com/Mohammed-Akeel-45/project-management
+Explanation
+This repository is now your personal copy, where you can freely edit files, create branches, and commit changes.
+
+Step 9: Verify the Fork
+The repository page will display:
+forked from Narendra500/project-management
+Explanation
+This indicates that your repository originated from the original project and remains linked to it.
+
+Step 10: Clone the Forked Repository to Your Computer
+Open terminal or PowerShell and execute:
+git clone https://github.com/Mohammed-Akeel-45/project-management.git
+Move into the project directory:
+cd project-management
+Explanation
+Cloning downloads the repository from GitHub to the local machine, allowing development and modifications.
+
+Step 11: Verify Remote Repository
+Run:
+git remote -v
+Example output:
+origin  https://github.com/Mohammed-Akeel-45/project-management.git (fetch)origin  https://github.com/Mohammed-Akeel-45/project-management.git (push)
+Explanation
+The origin remote points to your forked repository, meaning all future pushes will update your GitHub copy.
+
+Step 12: Start Working on the Project
+You can now:
+
+
+Create branches.
+
+
+Modify source code.
+
+
+Commit changes.
+
+
+Push updates to your fork.
+
+
+Create Pull Requests to contribute changes back to the original repository.
+
+
+Explanation
+Forking enables collaboration while protecting the original repository from unintended modifications.
+
+Flow of Forking Process
+Original Repository(Narendra500/project-management)                │                │ Fork                ▼Your Repository(Mohammed-Akeel-45/project-management)                │                │ Clone                ▼Local Machine                │                │ Modify Code                ▼Commit Changes                │                │ Push                ▼Your GitHub Repository                │                │ Pull Request                ▼Original Repository
+Outcome
+After completing these steps, you will have:
+✔ A GitHub account.
+✔ A personal copy (fork) of the application repository.
+✔ A local copy on your machine.
+✔ The ability to modify, commit, and push code independently.
