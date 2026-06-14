@@ -1,0 +1,233 @@
+8. Create a Maven Project, Understanding the POM File, Dependency Management and Plugins
+Aim
+
+To create a Maven project and understand the POM file, dependency management, and plugins.
+
+Step 1: Verify Maven Installation
+
+Open Command Prompt and execute:
+
+mvn -version
+Explanation
+
+This command verifies that Maven is installed correctly.
+
+Step 2: Create a Maven Project
+
+Execute:
+
+mvn archetype:generate
+Explanation
+
+This command creates a new Maven project using a predefined template (archetype).
+
+Step 3: Select Archetype
+
+When prompted:
+
+Choose a number or apply filter:
+
+Type the number corresponding to:
+
+org.apache.maven.archetypes:maven-archetype-quickstart
+
+For example:
+
+2349
+Explanation
+
+The maven-archetype-quickstart template generates a simple Java project structure.
+
+Step 4: Enter Project Details
+Group ID
+com.example
+
+Explanation: Represents the organization or package name.
+
+Artifact ID
+MyProject
+
+Explanation: Represents the project name.
+
+Version
+
+Press Enter to accept:
+
+1.0-SNAPSHOT
+
+Explanation: Specifies the project version.
+
+Package
+
+Press Enter to accept:
+
+com.example
+
+Explanation: Specifies the package where Java classes will be created.
+
+Confirm Configuration
+
+When prompted:
+
+Confirm properties configuration:
+
+Enter:
+
+Y
+Explanation
+
+Maven creates the project successfully.
+
+Step 5: Move to the Project Directory
+cd MyProject
+Explanation
+
+Changes the current directory to the newly created project.
+
+Step 6: View the Project Structure
+MyProject
+│
+├── src
+│   ├── main
+│   │   └── java
+│   │       └── com
+│   │           └── example
+│   │               └── App.java
+│   │
+│   └── test
+│       └── java
+│           └── com
+│               └── example
+│                   └── AppTest.java
+│
+└── pom.xml
+Explanation
+src/main/java → Contains source code.
+src/test/java → Contains test files.
+pom.xml → Contains project configuration.
+Understanding the POM File
+
+Open:
+
+pom.xml
+
+Example:
+
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+
+    <artifactId>MyProject</artifactId>
+
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+</project>
+Explanation
+modelVersion
+<modelVersion>4.0.0</modelVersion>
+
+Specifies the POM model version.
+
+groupId
+<groupId>com.example</groupId>
+
+Identifies the organization or package.
+
+artifactId
+<artifactId>MyProject</artifactId>
+
+Represents the project name.
+
+version
+<version>1.0-SNAPSHOT</version>
+
+Specifies the project version.
+
+packaging
+<packaging>jar</packaging>
+
+Specifies the output package type.
+
+Dependency Management
+
+Dependencies are external libraries required by the project.
+
+Example:
+
+<dependencies>
+
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+    </dependency>
+
+</dependencies>
+Explanation
+groupId → Library organization.
+artifactId → Library name.
+version → Library version.
+scope → Defines where the dependency is used.
+
+Maven automatically downloads dependencies from the Maven repository.
+
+Plugins
+
+Plugins perform tasks such as compilation, testing, packaging, and cleaning.
+
+Example:
+
+<build>
+    <plugins>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+        </plugin>
+
+    </plugins>
+</build>
+Explanation
+
+The maven-compiler-plugin compiles Java source files.
+
+Common plugins include:
+
+Plugin	Purpose
+maven-compiler-plugin	Compiles Java code
+maven-surefire-plugin	Executes tests
+maven-jar-plugin	Creates JAR files
+maven-clean-plugin	Removes build files
+Step 7: Compile the Project
+mvn compile
+Explanation
+
+Compiles the source code.
+
+Step 8: Execute Test Cases
+mvn test
+Explanation
+
+Runs the test cases present in the project.
+
+Step 9: Package the Project
+mvn package
+Explanation
+
+Creates the JAR file inside the target directory.
+
+Step 10: Clean the Project
+mvn clean
+Explanation
+
+Deletes previously generated files from the target folder.
+
+Result
+
+Thus, a Maven project was successfully created, and the concepts of the POM file, dependency management, and plugins were studied and implemented successfully.
