@@ -1,0 +1,184 @@
+9. Build and Run a Java Application with Maven and Migrate the Same Application to Gradle
+Aim
+
+To build and run a Java application using Maven and migrate the same application to Gradle.
+
+Part A: Build and Run a Java Application with Maven
+Step 1: Create a Maven Project
+
+Open Command Prompt and execute:
+
+mvn archetype:generate
+Explanation
+
+Creates a new Maven project using a predefined template.
+
+Step 2: Select Archetype
+
+When prompted:
+
+Choose a number or apply filter:
+
+Select the number corresponding to:
+
+org.apache.maven.archetypes:maven-archetype-quickstart
+
+For example:
+
+2349
+Step 3: Enter Project Details
+
+Enter:
+
+groupId : com.example
+artifactId : MyProject
+version : 1.0-SNAPSHOT
+package : com.example
+
+Confirm by entering:
+
+Y
+Explanation
+
+Maven creates the project structure.
+
+Step 4: Move to the Project Directory
+cd MyProject
+Step 5: Modify App.java
+
+Open:
+
+src/main/java/com/example/App.java
+
+Replace its contents with:
+
+package com.example;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println("Hello from Maven!");
+    }
+}
+Explanation
+
+This is a simple Java application that prints a message.
+
+Step 6: Compile the Project
+mvn compile
+Explanation
+
+Compiles all Java source files.
+
+Step 7: Package the Project
+mvn package
+Explanation
+
+Creates a JAR file inside the target folder.
+
+Step 8: Run the Application
+java -cp target/classes com.example.App
+Output
+Hello from Maven!
+Part B: Migrate the Same Application to Gradle
+Step 9: Initialize Gradle in the Existing Maven Project
+
+Execute:
+
+gradle init
+
+When prompted, select:
+
+Found a Maven build. Generate a Gradle build from this?
+yes
+
+Select build script DSL:
+Groovy
+
+Generate build using new APIs and behavior?
+no
+Explanation
+
+Gradle converts the Maven project into a Gradle project and generates:
+
+build.gradle
+settings.gradle
+gradlew
+gradlew.bat
+
+while reusing the existing src folder.
+
+Step 10: Modify build.gradle
+
+Replace:
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+with:
+
+plugins {
+    id 'application'
+    id 'maven-publish'
+}
+
+Add the following at the end of the file:
+
+application {
+    mainClass = 'com.example.App'
+}
+Explanation
+application plugin provides the run task.
+mainClass specifies the entry point of the application.
+Step 11: Build the Gradle Project
+
+Execute:
+
+gradle build -x test
+Explanation
+
+Builds the project and skips test execution.
+
+Step 12: Run the Application
+
+Execute:
+
+gradle run
+Output
+Hello from Maven!
+
+
+
+Issues Faced and Solutions
+Issue 1: Test Execution Failure
+Error:
+Execution failed for task ':test'.There are test sources present and no filters are applied,but the test task did not discover any tests to execute.
+Solution
+Skip tests during build:
+gradle build -x test
+
+Issue 2: Task 'run' Not Found
+Error:
+Task 'run' not found in root project 'MyProject'
+Cause
+The generated build.gradle used:
+plugins {    id 'java-library'    id 'maven-publish'}
+which does not provide the run task.
+Solution
+Replace it with:
+plugins {    id 'application'    id 'maven-publish'}
+and add:
+application {    mainClass = 'com.example.App'}
+
+Comparison Between Maven and Gradle
+MavenGradleUses pom.xmlUses build.gradleXML-based configurationGroovy/Kotlin DSLCommands begin with mvnCommands begin with gradleSlower buildsFaster incremental buildsDependency management through POMDependency management through build.gradle
+
+Result
+Thus, a Java application was successfully built and executed using Maven. The same application was migrated to Gradle, built using:
+gradle build -x test
+and executed using:
+gradle run
+producing the output:
+Hello from Maven!
+Hence, the migration of the application from Maven to Gradle was successfully completed.

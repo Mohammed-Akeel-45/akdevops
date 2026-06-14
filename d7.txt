@@ -1,0 +1,200 @@
+7. Demonstrate the Fundamentals of Maven and Gradle, and Perform Their Installation and Setup
+
+Both Maven and Gradle are build automation tools used for Java projects. Before installing them, Java must be installed because both tools require a Java Development Kit (JDK).
+
+Part 1: Installing Java (Prerequisite)
+Step 1: Download Java JDK
+
+Go to:
+
+Oracle JDK Downloads
+
+or
+
+OpenJDK (Temurin) Downloads
+
+Download:
+
+JDK 21 (recommended)
+Windows x64 Installer (.msi)
+Step 2: Install Java
+Double-click the downloaded file.
+Click Next.
+Continue clicking Next.
+Click Install.
+Finish the installation.
+Step 3: Verify Java Installation
+
+Open Command Prompt and type:
+
+java -version
+
+Expected output:
+
+java version "21.x.x"
+Java(TM) SE Runtime Environment
+Java HotSpot(TM) 64-Bit Server VM
+
+Check compiler:
+
+javac -version
+
+Example:
+
+javac 21.0.2
+Step 4: Set JAVA_HOME Environment Variable
+Find Java Installation Path
+
+Usually:
+
+C:\Program Files\Java\jdk-21
+Add JAVA_HOME
+Search Environment Variables.
+Click:
+Edit the system environment variables
+Click:
+Environment Variables
+Under System Variables, click:
+New
+
+Enter:
+
+Variable name:
+
+JAVA_HOME
+
+Variable value:
+
+C:\Program Files\Java\jdk-21
+
+Click OK.
+
+Add Java to PATH
+
+Under System Variables:
+
+Select:
+
+Path
+
+Click Edit → New
+
+Add:
+
+%JAVA_HOME%\bin
+
+Click OK.
+
+Verify
+
+Close Command Prompt and reopen it.
+
+Run:
+
+java -version
+
+and
+
+javac -version
+
+
+Part 2: Maven Installation
+
+B. Maven Installation and Setup
+Step 1: Install Java (Prerequisite)
+Download and install JDK from Oracle or OpenJDK.
+Verify Java installation:
+java -version
+Example Output:
+java version "21.x.x"
+
+Step 2: Download Maven
+Download Apache Maven binary zip file from:
+https://maven.apache.org/download.cgi
+Example:
+apache-maven-3.9.x-bin.zip
+
+Step 3: Extract Maven
+Extract the zip file to:
+C:\Program Files\Apache\Maven
+For example:
+C:\Program Files\Apache\Maven\apache-maven-3.9.x
+
+Step 4: Add Maven to PATH
+Open:
+Control Panel→ System→ Advanced System Settings→ Environment Variables
+Under System Variables, select:
+Path
+Click:
+Edit → New
+Add:
+C:\Program Files\Apache\Maven\apache-maven-3.9.x\bin
+Click OK.
+Explanation
+Adding the bin folder to PATH enables the mvn command to be executed from any directory.
+
+Step 5: Verify Maven Installation
+Open Command Prompt and execute:
+mvn -version
+Example Output:
+Apache Maven 3.9.xJava version: 21.x.x
+
+C. Gradle Fundamentals
+Gradle is an advanced build automation tool used for Java, Android, and other applications.
+Features of Gradle
+
+
+Faster incremental builds.
+
+
+Uses Groovy or Kotlin DSL.
+
+
+Supports dependency management.
+
+
+Supports Java, Android, Kotlin, and Groovy projects.
+
+
+
+D. Gradle Installation and Setup
+Step 1: Install Java (Prerequisite)
+Verify Java installation:
+java -version
+
+Step 2: Download Gradle
+Download Gradle binary distribution from:
+https://gradle.org/releases/
+Example:
+gradle-9.x-bin.zip
+
+Step 3: Extract Gradle
+Extract the zip file to:
+C:\Gradle
+For example:
+C:\Gradle\gradle-9.x
+
+Step 4: Add Gradle to PATH
+Open:
+Control Panel→ System→ Advanced System Settings→ Environment Variables
+Under System Variables, select:
+Path
+Click:
+Edit → New
+Add:
+C:\Gradle\gradle-9.x\bin
+Click OK.
+Explanation
+Adding the bin folder to PATH enables the gradle command to be executed from any directory.
+
+Step 5: Verify Gradle Installation
+Open Command Prompt and execute:
+gradle -version
+Example Output:
+------------------------------------------------------------Gradle 9.x------------------------------------------------------------JVM: 21.x.xOS: Windows
+
+Result
+Thus, the fundamentals of Maven and Gradle were studied, and their installation and setup were successfully performed. The installations were verified using:
+mvn -version
+and
+gradle -version
