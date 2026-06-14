@@ -1,0 +1,239 @@
+Experiment 2: Perform Version Control Using Git and GitHub
+Aim
+
+To perform version control on websites or software using Git by managing repositories through a browser-based interface (GitHub) and synchronizing changes with push and pull commands from the command line and GUI.
+
+Step 1: Install Git
+Command
+git --version
+Explanation
+Git is a distributed version control system used to track changes in source code.
+The command checks whether Git is installed and displays the installed version.
+
+Example Output
+
+git version 2.50.1
+Step 2: Configure Git Username and Email
+Commands
+git config --global user.name "Mohammed Akeel"
+git config --global user.email "your_email@gmail.com"
+Verify Configuration
+git config --list
+Explanation
+Git uses these details to identify who made each commit.
+--global means the settings apply to all repositories on the computer.
+git config --list displays all configured settings.
+Step 3: Create a Repository on GitHub (Browser Interface)
+Procedure
+Open GitHub.
+Sign in to your account.
+Click New Repository.
+
+Enter repository name:
+
+WebsiteProject
+Choose:
+Public or Private repository.
+Click Create Repository.
+Explanation
+A repository stores all project files and their history.
+GitHub provides a browser-based interface for managing repositories.
+Step 4: Create a Project Folder Locally
+Command
+mkdir WebsiteProject
+cd WebsiteProject
+Explanation
+mkdir creates a new directory.
+cd moves into that directory.
+Step 5: Initialize Git Repository
+Command
+git init
+Explanation
+Creates a hidden .git folder.
+Enables Git tracking for the project.
+
+Output
+
+Initialized empty Git repository
+Step 6: Create Files
+
+Example:
+
+HTML File
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Website</title>
+</head>
+<body>
+<h1>Welcome to My Website</h1>
+</body>
+</html>
+
+Save as:
+
+index.html
+Explanation
+This is the project file whose changes will be tracked by Git.
+Step 7: Check Repository Status
+Command
+git status
+Explanation
+Displays:
+New files.
+Modified files.
+Deleted files.
+Files ready to commit.
+
+Example Output
+
+Untracked files:
+index.html
+Step 8: Add Files to Staging Area
+Command
+git add .
+Explanation
+Adds all files to the staging area.
+Prepares them for committing.
+
+You can also add a specific file:
+
+git add index.html
+Step 9: Commit the Changes
+Command
+git commit -m "Initial commit"
+Explanation
+Saves a snapshot of the project.
+The message explains what changes were made.
+
+Example Output
+
+[main abc1234] Initial commit
+1 file changed
+Step 10: Connect Local Repository to GitHub Repository
+Command
+git remote add origin https://github.com/username/WebsiteProject.git
+Verify Remote
+git remote -v
+Explanation
+origin is the default name given to the remote repository.
+It links the local project with the GitHub repository.
+
+Example Output
+
+origin https://github.com/username/WebsiteProject.git (fetch)
+origin https://github.com/username/WebsiteProject.git (push)
+Step 11: Push Files to GitHub
+Command
+git branch -M main
+git push -u origin main
+Explanation
+git branch -M main
+Renames the current branch to main.
+git push -u origin main
+Uploads local commits to GitHub.
+-u sets origin/main as the default upstream branch.
+
+After this, future pushes can be done simply with:
+
+git push
+Step 12: Verify Files on GitHub
+Procedure
+Refresh the repository page.
+Observe that index.html has been uploaded.
+Explanation
+The project is now synchronized with GitHub.
+Step 13: Modify the File
+
+Example:
+
+<h1>Welcome to Git Version Control</h1>
+
+Save the changes.
+
+Explanation
+Git tracks modifications made to files.
+Step 14: Check Status Again
+Command
+git status
+Example Output
+modified: index.html
+Explanation
+Indicates that the file has changed since the last commit.
+Step 15: Stage and Commit the Changes
+Commands
+git add .
+git commit -m "Updated homepage"
+Explanation
+Stores another version of the project.
+Multiple commits maintain the history of changes.
+Step 16: Push Updated Changes
+Command
+git push
+Explanation
+Sends the new commit to GitHub.
+Keeps local and remote repositories synchronized.
+Step 17: Pull Changes from GitHub
+Command
+git pull origin main
+Explanation
+Downloads the latest changes from GitHub.
+Merges them with the local repository.
+Useful when working on multiple systems or with teammates.
+Step 18: View Commit History
+Command
+git log
+Explanation
+Displays all commits with:
+Commit ID.
+Author name.
+Date and time.
+Commit message.
+
+Example:
+
+commit 9f5a8d3
+Author: Mohammed Akeel
+Date: ...
+
+Updated homepage
+
+commit a34b12e
+Author: Mohammed Akeel
+Date: ...
+
+Initial commit
+Step 19: Perform Version Control Using GUI (GitHub Desktop)
+1. Install GitHub Desktop
+
+Download and install GitHub Desktop.
+
+2. Sign in with GitHub account
+3. Clone Repository
+File → Clone Repository
+4. Make Changes
+
+Edit files using VS Code or another editor.
+
+5. Commit Changes
+
+In GitHub Desktop:
+
+Summary → Commit to main
+6. Push Changes
+
+Click:
+
+Push Origin
+7. Pull Changes
+
+Click:
+
+Fetch Origin → Pull Origin
+Explanation
+
+GitHub Desktop provides a graphical interface for version control without using terminal commands.
+
+Result
+
+Successfully performed version control on website/software files using Git and GitHub by managing repositories through a browser-based interface and synchronizing changes using push and pull commands from both command line and GUI.
