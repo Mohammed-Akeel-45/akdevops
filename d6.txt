@@ -477,7 +477,7 @@ SonarQube was successfully installed and integrated with Jenkins. A CI/CD pipeli
 10. go to jenkins -> click on settings icon in top right
 11. plugins -> available plugins -> search sonar -> select sonarqube scanner for jenkins and click install
 12. go to jenkins settings again -> system -> sonarqube servers -> add sonarqube
-13. name: sonarqube_scanner, server url: http://sonarqube:9000, sonarqube auth token: +Add -> global
+13. name: sonarqube_server, server url: http://sonarqube:9000, sonarqube auth token: +Add -> global
 14. secret text -> next -> in secret paste the token copied from sonarqube, id write anything -> create
 15. select the new token in sonarqube auth token
 16. save button in bottom left corner
@@ -485,7 +485,7 @@ SonarQube was successfully installed and integrated with Jenkins. A CI/CD pipeli
 18. name: sonarqube_scanner -> save button on bottom left corner
 19. in jenkins home page + New item, select pipeline, give any name -> ok
 20. scroll down to Pipeline -> defition -> pipeline  script from scm
-21. SCM: git, Repository url: HTTPS url of the project-management project from my github you get after you click on code button.
+21. SCM: git, Repository url:(https://github.com/Narendra500/project-management) HTTPS url of the project-management project from my github you get after you click on code button.
 22. branch specifier: */main
 23. Save button
 24. click on the the newly created pipeline -> build now. 
