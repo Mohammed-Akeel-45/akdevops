@@ -1,0 +1,910 @@
+Program 6: Install and Configure SonarQube and Create a Jenkins CI/CD Pipeline for Static Code Analysis
+Aim
+
+To install and configure SonarQube on a local machine and create a Jenkins CI/CD pipeline that integrates SonarQube to perform static code analysis.
+
+Software Requirements
+Windows 10/11
+Docker Desktop
+Visual Studio Code
+Internet Connection
+Theory
+Jenkins
+
+Jenkins is an open-source automation server used for Continuous Integration and Continuous Delivery (CI/CD). It automates build, testing, and deployment processes.
+
+SonarQube
+
+SonarQube is an open-source platform used to inspect source code and detect:
+
+Bugs
+Vulnerabilities
+Code Smells
+Duplicate Code
+CI/CD Pipeline
+
+A pipeline is a sequence of stages that automate software development activities.
+
+Architecture
+
+Developer Code
+
+↓
+
+Jenkins Pipeline
+
+↓
+
+Build Application
+
+↓
+
+SonarQube Analysis
+
+↓
+
+Code Quality Report
+
+Step 1: Create Project Folder
+
+Create:
+
+C:\docker-projects\jenkins-sonarqube
+Explanation
+
+This folder stores Docker files required to run Jenkins and SonarQube.
+
+Step 2: Open Folder in VS Code
+
+Open VS Code.
+
+Select:
+
+File → Open Folder
+
+Choose:
+
+C:\docker-projects\jenkins-sonarqube
+Step 3: Create Dockerfile
+
+Create a file named:
+
+Dockerfile
+
+Paste:
+
+FROM jenkins/jenkins:lts-jdk21
+
+USER root
+
+RUN apt-get update && \
+    apt-get install vim -y && \
+    apt-get install -y curl ca-certificates && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs
+
+USER jenkins
+Explanation of Dockerfile
+FROM jenkins/jenkins
+
+Uses Jenkins Long Term Support image with Java 21.
+
+USER root
+
+Switches to administrator privileges.
+
+apt-get update
+
+Updates package information.
+
+apt-get install vim -y
+
+Installs Vim editor.
+
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+
+Adds Node.js repository.
+
+apt-get install -y nodejs
+
+Installs Node.js version 22.
+
+USER jenkins
+
+Returns to Jenkins user.
+
+Step 4: Create docker-compose.yml
+
+Create:
+
+docker-compose.yml
+
+Paste:
+
+services:
+  jenkins:
+    build: .
+    container_name: jenkins
+    ports:
+      - 8081:8080
+      - 50000:50000
+    networks:
+      - jenkins-sonar-net
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - 9000:9000
+    networks:
+      - jenkins-sonar-net
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+networks:
+  jenkins-sonar-net:
+    driver: bridge
+
+volumes:
+  jenkins_home:
+    external: true
+  sonarqube_data:
+    external: true
+  sonarqube_extensions:
+    external: true
+  sonarqube_logs:
+    external: true
+Explanation
+Jenkins Service
+
+Creates Jenkins container.
+
+SonarQube Service
+
+Creates SonarQube container.
+
+Ports
+
+8081 → Jenkins
+
+9000 → SonarQube
+
+Network
+
+Allows communication between Jenkins and SonarQube.
+
+Volumes
+
+Provide persistent storage for Jenkins and SonarQube data.
+
+Step 5: Create Volumes
+
+Open Command Prompt and execute:
+
+docker volume create jenkins_home
+
+docker volume create sonarqube_data
+
+docker volume create sonarqube_extensions
+
+docker volume create sonarqube_logs
+Explanation
+
+Volumes preserve data even after containers are deleted.
+
+Step 6: Start Containers
+
+Navigate to the folder:
+
+cd C:\docker-projects\jenkins-sonarqube
+
+Run:
+
+docker compose up -d
+Explanation
+
+Docker Compose:
+
+Builds Jenkins image.
+Downloads SonarQube image.
+Creates network.
+Starts both containers.
+Step 7: Verify Running Containers
+
+Execute:
+
+docker ps
+
+Two containers should be visible:
+
+jenkins
+sonarqube
+Step 8: Obtain Jenkins Password
+
+Execute:
+
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+Copy the generated password.
+
+Step 9: Open Jenkins
+
+Open:
+
+http://localhost:8081
+
+Paste the password.
+
+Step 10: Install Suggested Plugins
+
+Choose:
+
+Install Suggested Plugins
+
+Step 11: Create Admin User
+
+Provide:
+
+Username
+Password
+Full Name
+Email Address
+
+Click:
+
+Save and Continue
+
+Step 12: Open SonarQube
+
+Open:
+
+http://localhost:9000
+
+Default credentials:
+
+Username:
+
+admin
+
+Password:
+
+admin
+
+Change the password after login.
+
+Step 13: Generate SonarQube Token
+
+Navigate:
+
+My Account
+
+↓
+
+Security
+
+↓
+
+Generate Tokens
+
+Name:
+
+jenkins-token
+
+Click:
+
+Generate
+
+Copy the token.
+
+Step 14: Install SonarQube Scanner Plugin in Jenkins
+
+Navigate:
+
+Manage Jenkins
+
+↓
+
+Plugins
+
+↓
+
+Available Plugins
+
+Search:
+
+SonarQube Scanner
+
+Install the plugin.
+
+Restart Jenkins.
+
+Step 15: Configure SonarQube Server
+
+Navigate:
+
+Manage Jenkins
+
+↓
+
+System
+
+↓
+
+SonarQube Servers
+
+Click:
+
+Add SonarQube
+
+Name:
+
+My SonarQube Server
+
+Server URL:
+
+http://sonarqube:9000
+
+Authentication Token:
+
+Paste the generated token.
+
+Save.
+
+Step 16: Configure Maven
+
+Navigate:
+
+Manage Jenkins
+
+↓
+
+Tools
+
+↓
+
+Maven Installations
+
+Add Maven
+
+Name:
+
+Maven3
+
+Check:
+
+Install Automatically
+
+Save.
+
+Step 17: Create Pipeline Job
+
+Dashboard
+
+↓
+
+New Item
+
+↓
+
+Pipeline
+
+Name:
+
+SonarPipeline
+
+Click OK.
+
+Step 18: Pipeline Script
+
+Select:
+
+Pipeline Script
+
+Paste:
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+    }
+
+    stages {
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('My SonarQube Server') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+    }
+}
+
+Save.
+
+Step 19: Build the Pipeline
+
+Click:
+
+Build Now
+
+Step 20: View Analysis Report
+
+Open:
+
+http://localhost:9000
+
+View:
+
+Bugs
+Vulnerabilities
+Code Smells
+Duplicated Code
+Result
+
+SonarQube was successfully installed and integrated with Jenkins. A CI/CD pipeline was created to perform static code analysis and generate code quality reports.
+
+
+
+
+
+
+
+
+##naru
+  1. start jenkins and sonarqube using docker compose up
+2. Open localhost:8081 and enter admin password for jenkins
+3. create jekins account
+
+4. install recomendded plugins.
+5. go to localhost:9000 and enter admin for name and admin for password
+6. set new password for sonaqube
+7. in sonarqube click on profile icon in top right -> my account -> security 
+8. Generate tokens: enter some token name, select token type as global analysis token -> generate
+9. Copy the generated token
+10. go to jenkins -> click on settings icon in top right
+11. plugins -> available plugins -> search sonar -> select sonarqube scanner for jenkins and click install
+12. go to jenkins settings again -> system -> sonarqube servers -> add sonarqube
+13. name: sonarqube_scanner, server url: http://sonarqube:9000, sonarqube auth token: +Add -> global
+14. secret text -> next -> in secret paste the token copied from sonarqube, id write anything -> create
+15. select the new token in sonarqube auth token
+16. save button in bottom left corner
+17. jenkins settings -> tools -> sonarqube scanner installations -> aadd sonarqube scanner
+18. name: sonarqube_scanner -> save button on bottom left corner
+19. in jenkins home page + New item, select pipeline, give any name -> ok
+20. scroll down to Pipeline -> defition -> pipeline  script from scm
+21. SCM: git, Repository url: HTTPS url of the project-management project from my github you get after you click on code button.
+22. branch specifier: */main
+23. Save button
+24. click on the the newly created pipeline -> build now. 
+
+
+
+
+
+
+
+  ###new
+
+
+  Program 6
+Install and Configure SonarQube and Create a Jenkins CI/CD Pipeline for Static Code Analysis
+Aim
+
+To install Jenkins and SonarQube and integrate them to perform static code analysis automatically.
+
+Step 1: Create Project Folder
+
+Create a folder:
+
+C:\docker-projects\jenkins-sonarqube
+Purpose
+
+This folder stores Docker files used to run Jenkins and SonarQube.
+
+Step 2: Open Folder in VS Code
+
+Open VS Code.
+
+Select:
+
+File
+↓
+Open Folder
+↓
+C:\docker-projects\jenkins-sonarqube
+Step 3: Create Dockerfile
+
+Create a file named:
+
+Dockerfile
+
+Paste:
+
+FROM jenkins/jenkins:lts-jdk21
+
+USER root
+
+RUN apt-get update && \
+    apt-get install vim -y && \
+    apt-get install -y curl ca-certificates && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs
+
+USER jenkins
+Explanation
+FROM jenkins/jenkins:lts-jdk21
+
+Downloads Jenkins image with Java 21.
+
+USER root
+
+Switches to administrator privileges.
+
+apt-get update
+
+Updates package information.
+
+Install Node.js
+
+Installs Node.js required for JavaScript projects.
+
+USER jenkins
+
+Returns to Jenkins user.
+
+Step 4: Create docker-compose.yml
+
+Create:
+
+docker-compose.yml
+
+Paste:
+
+services:
+  jenkins:
+    build: .
+    container_name: jenkins
+    ports:
+      - 8081:8080
+      - 50000:50000
+    networks:
+      - jenkins-sonar-net
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - 9000:9000
+    networks:
+      - jenkins-sonar-net
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+networks:
+  jenkins-sonar-net:
+    driver: bridge
+
+volumes:
+  jenkins_home:
+    external: true
+  sonarqube_data:
+    external: true
+  sonarqube_extensions:
+    external: true
+  sonarqube_logs:
+    external: true
+Step 5: Create Volumes
+
+Open CMD:
+
+docker volume create jenkins_home
+
+docker volume create sonarqube_data
+
+docker volume create sonarqube_extensions
+
+docker volume create sonarqube_logs
+Purpose of Volumes
+jenkins_home
+
+Stores:
+
+Jobs
+Plugins
+Users
+sonarqube_data
+
+Stores analysis reports.
+
+sonarqube_extensions
+
+Stores SonarQube plugins.
+
+sonarqube_logs
+
+Stores log files.
+
+Step 6: Start Containers
+
+Go to:
+
+cd C:\docker-projects\jenkins-sonarqube
+
+Run:
+
+docker compose up -d
+Explanation
+
+Docker:
+
+Builds Jenkins image.
+Downloads SonarQube image.
+Creates network.
+Starts both containers.
+Step 7: Verify Containers
+docker ps
+
+You should see:
+
+jenkins
+sonarqube
+Step 8: Obtain Jenkins Password
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+Copy the password.
+
+Step 9: Open Jenkins
+
+Open:
+
+http://localhost:8081
+
+Paste password.
+
+Step 10: Install Suggested Plugins
+
+Choose:
+
+Install Suggested Plugins
+Step 11: Create Jenkins Admin User
+
+Provide:
+
+Username
+Password
+Email
+
+Click:
+
+Save and Continue
+Step 12: Open SonarQube
+
+Open:
+
+http://localhost:9000
+
+Login:
+
+Username:
+
+admin
+
+Password:
+
+admin
+
+Change password.
+
+Step 13: Generate Token
+
+Navigate:
+
+Profile Icon
+↓
+My Account
+↓
+Security
+↓
+Generate Tokens
+
+Token name:
+
+jenkins-token
+
+Type:
+
+Global Analysis Token
+
+Click:
+
+Generate
+
+Copy token.
+
+Step 14: Install SonarQube Plugin
+
+Navigate:
+
+Manage Jenkins
+↓
+Plugins
+↓
+Available Plugins
+
+Search:
+
+SonarQube Scanner
+
+Install.
+
+Step 15: Configure SonarQube Server
+
+Go to:
+
+Manage Jenkins
+↓
+System
+↓
+SonarQube Servers
+↓
+Add SonarQube
+
+Name:
+
+sonarqube_server
+
+Server URL:
+
+http://sonarqube:9000
+Why not localhost?
+
+Jenkins runs inside one container and SonarQube runs inside another.
+
+Therefore:
+
+❌
+
+http://localhost:9000
+
+means Jenkins itself.
+
+Correct:
+
+✅
+
+http://sonarqube:9000
+
+because Docker containers communicate using container names.
+
+Step 16: Add Authentication Token
+
+Click:
+
++ Add
+↓
+Jenkins
+
+Choose:
+
+Secret Text
+
+Paste token.
+
+ID:
+
+sonar-token
+
+Click:
+
+Create
+
+Select this credential.
+
+Save.
+
+Step 17: Configure Sonar Scanner
+
+Navigate:
+
+Manage Jenkins
+↓
+Tools
+↓
+SonarQube Scanner Installations
+↓
+Add SonarQube Scanner
+
+Name:
+
+sonarqube_scanner
+
+Enable:
+
+Install automatically
+
+Save.
+
+Step 18: Create Pipeline Job
+
+Home Page
+
+New Item
+↓
+Pipeline
+
+Name:
+
+SonarPipeline
+
+Click OK.
+
+Step 19: Configure Pipeline
+
+Scroll to:
+
+Pipeline
+
+Definition:
+
+Pipeline script from SCM
+
+SCM:
+
+Git
+
+Repository URL:
+
+Your GitHub Repository URL
+
+Example:
+
+https://github.com/Narendra500/project-management.git
+
+Branch:
+
+*/main
+
+Save.
+
+Step 20: Build Pipeline
+
+Click:
+
+Build Now
+Working of Program
+GitHub Repository
+        ↓
+Jenkins Pipeline
+        ↓
+Build Application
+        ↓
+Sonar Scanner
+        ↓
+SonarQube Server
+        ↓
+Code Analysis
+        ↓
+Bugs
+Vulnerabilities
+Code Smells
+Duplications
+Result
+
+Jenkins and SonarQube were successfully installed and integrated using Docker. A CI/CD pipeline was created to perform static code analysis and generate code quality reports automatically.
