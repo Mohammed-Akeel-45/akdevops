@@ -1,0 +1,377 @@
+Program 3: Install Docker, Explore Container Commands, Create Containers and Deploy Applications using Docker and Docker Hub (Windows)
+Step 1: Install Docker on Windows
+
+Docker Desktop is the official application used to run Docker containers on Windows.
+
+Procedure
+Download Docker Desktop from the Docker website.
+Run the installer.
+Keep the default settings and click Install.
+Enable WSL2 if prompted.
+Restart the computer.
+Open Docker Desktop and wait until the message "Docker Engine is running" appears.
+Explanation
+Docker Desktop provides the Docker Engine required to create and run containers.
+It also includes Docker CLI and Docker Hub integration.
+Once Docker Desktop starts, the Docker service runs in the background, allowing Docker commands to be executed from Command Prompt or PowerShell.
+Step 2: Verify Docker Installation
+Command
+docker --version
+Example Output
+Docker version 28.2.2, build e6534b4
+Explanation
+docker → Docker command-line utility.
+--version → Displays the installed Docker version.
+
+This command confirms that Docker has been installed successfully.
+
+Step 3: Pull an Operating System Image
+Command
+docker pull ubuntu
+Explanation
+docker pull
+
+Downloads an image from Docker Hub.
+
+ubuntu
+
+Specifies the Ubuntu operating system image.
+
+After execution, Docker stores the Ubuntu image locally so that containers can be created from it.
+
+Step 4: Create and Run a Container
+Command
+docker run -it ubuntu
+Explanation
+docker run
+
+Creates and starts a new container.
+
+-i
+
+Interactive mode. Keeps keyboard input active.
+
+-t
+
+Allocates a terminal inside the container.
+
+ubuntu
+
+Indicates that the container should be created from the Ubuntu image.
+
+Output
+root@5c2c7ab4:/#
+
+This prompt shows that you are now inside an isolated Ubuntu container.
+
+Step 5: List Running Containers
+Command
+docker ps
+Explanation
+
+Displays all containers that are currently running.
+
+Information shown includes:
+
+Container ID
+Image name
+Status
+Ports
+Container name
+
+Example:
+
+CONTAINER ID   IMAGE
+4d7f89ab32     ubuntu
+Step 6: List All Containers
+Command
+docker ps -a
+Explanation
+Displays both running and stopped containers.
+Useful for viewing container history.
+
+Example:
+
+CONTAINER ID   IMAGE     STATUS
+123abc         ubuntu    Exited
+456def         nginx     Up
+Step 7: Stop a Container
+Command
+docker stop <container_id>
+
+Example:
+
+docker stop 4d7f89ab32
+Explanation
+docker stop
+
+Gracefully stops a running container.
+
+container_id
+
+Represents the unique identifier of the container.
+
+The container remains available but is no longer running.
+
+Step 8: Remove a Container
+Command
+docker rm <container_id>
+
+Example
+
+docker rm 4d7f89ab32
+Explanation
+docker rm
+
+Deletes the container permanently.
+
+The image used to create the container is not deleted.
+
+Step 9: View Docker Images
+Command
+docker images
+Explanation
+
+Displays all images available on the local system.
+
+Information shown includes:
+
+Repository name
+Tag
+Image ID
+Size
+
+Example
+
+REPOSITORY     TAG
+ubuntu         latest
+python         3.8-slim
+Step 10: Remove an Image
+Command
+docker rmi ubuntu
+Explanation
+docker rmi
+
+Removes an image from local storage.
+
+ubuntu
+
+Specifies the image to delete.
+
+An image cannot be deleted if it is being used by a container.
+
+Step 11: Create a Sample Flask Application
+
+Create a folder named DockerApp and inside it create three files:
+
+File 1: app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+Explanation
+Import Flask
+from flask import Flask
+
+Imports the Flask framework.
+
+Create Application Object
+app = Flask(__name__)
+
+Creates a Flask application.
+
+Route Definition
+@app.route("/")
+
+Associates the root URL with the function below.
+
+Home Function
+def home():
+    return "Hello from Docker!"
+
+Returns the message when users access the webpage.
+
+Run the Application
+app.run(host="0.0.0.0", port=5000)
+host="0.0.0.0" allows access from outside the container.
+port=5000 specifies the port number.
+File 2: requirements.txt
+flask
+Explanation
+
+Contains the dependencies required by the application.
+
+Here, Flask is the only package needed.
+
+File 3: Dockerfile
+FROM python:3.8-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py"]
+Explanation of Each Instruction
+1. Base Image
+FROM python:3.8-slim
+
+Uses the lightweight Python 3.8 image as the base layer.
+
+2. Working Directory
+WORKDIR /app
+
+Creates and switches to the /app directory inside the container.
+
+3. Copy Files
+COPY . .
+
+Copies all files from the current folder into the container.
+
+4. Install Dependencies
+RUN pip install -r requirements.txt
+
+Installs Flask inside the image during the build process.
+
+5. Start the Application
+CMD ["python", "app.py"]
+
+Executes the Python application whenever the container starts.
+
+Step 12: Build Docker Image
+
+Open PowerShell in the project directory and execute:
+
+docker build -t flask-app .
+Explanation
+docker build
+
+Creates an image from the Dockerfile.
+
+-t flask-app
+
+Assigns the name flask-app to the image.
+
+.
+
+Represents the current directory containing:
+
+app.py
+requirements.txt
+Dockerfile
+
+Docker reads the Dockerfile and builds the image layer by layer.
+
+Step 13: Run the Container
+Command
+docker run -d -p 5000:5000 flask-app
+Explanation
+-d
+
+Runs the container in detached mode (background).
+
+-p 5000:5000
+
+Maps:
+
+Host Port : Container Port
+5000      : 5000
+flask-app
+
+Specifies the image from which the container will be created.
+
+Step 14: Access the Application
+
+Open a browser and visit:
+
+http://localhost:5000
+Output
+Hello from Docker!
+Explanation
+
+The Flask application is now running inside a Docker container and can be accessed through the browser.
+
+Step 15: Login to Docker Hub
+Command
+docker login
+Explanation
+
+Authenticates your Docker Hub account.
+
+Docker asks for:
+
+Username
+Password
+
+After successful authentication:
+
+Login Succeeded
+
+is displayed.
+
+Step 16: Tag the Image
+Command
+docker tag flask-app your_username/flask-app
+
+Example
+
+docker tag flask-app akeel45/flask-app
+Explanation
+
+Creates a Docker Hub compatible name:
+
+username/image_name
+
+This prepares the image for uploading.
+
+Step 17: Push Image to Docker Hub
+Command
+docker push your_username/flask-app
+
+Example
+
+docker push akeel45/flask-app
+Explanation
+
+Uploads the image to Docker Hub.
+
+Anyone can later download it using:
+
+docker pull akeel45/flask-app
+Overall Flow
+Install Docker Desktop
+        ↓
+Verify Installation
+        ↓
+Pull Ubuntu Image
+        ↓
+Run Container
+        ↓
+View Containers
+        ↓
+Stop/Delete Containers
+        ↓
+Create Flask Application
+        ↓
+Create Dockerfile
+        ↓
+Build Image
+        ↓
+Run Container
+        ↓
+Access Application
+        ↓
+Login to Docker Hub
+        ↓
+Tag Image
+        ↓
+Push Image
+
+This experiment demonstrates Docker installation on Windows, basic container management commands, creation of containers using operating system images, containerization of a Flask application, and deployment of the image to Docker Hub.
