@@ -375,3 +375,44 @@ Tag Image
 Push Image
 
 This experiment demonstrates Docker installation on Windows, basic container management commands, creation of containers using operating system images, containerization of a Flask application, and deployment of the image to Docker Hub.
+
+
+
+
+
+
+
+
+
+
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+
+
+#Dockerfile
+FROM python:3.8-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py"]
+
+
+
+
+
+#requirements.txt
+flask
