@@ -1,0 +1,373 @@
+4. Design, Deploy, and Manage a Microservices Architecture using Docker and Docker Compose
+
+This experiment demonstrates how multiple services (a Flask application and a MySQL database) can run independently in separate containers and communicate with each other using Docker Compose.
+
+Step 1: Create Project Directory Structure
+Command
+mkdir microservice-app
+cd microservice-app
+mkdir app db
+Explanation
+mkdir microservice-app
+Creates the main project folder named microservice-app.
+cd microservice-app
+Moves into the project directory.
+mkdir app db
+Creates two subdirectories:
+app → Contains the Flask application files.
+db → Reserved for database-related files (though not required here since MySQL image is pulled directly from Docker Hub).
+Purpose
+
+Organizing files into separate directories improves maintainability and follows the microservices concept of separating components.
+
+Step 2: Create a Simple Flask Application
+
+Create app/app.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Microservice App!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+Explanation
+from flask import Flask
+
+Imports the Flask framework required to build a web application.
+
+app = Flask(__name__)
+
+Creates a Flask application object.
+
+@app.route('/')
+
+Defines the URL path /.
+
+Whenever a user visits:
+
+http://localhost:5000
+
+the function below will execute.
+
+def home():
+
+Creates a function named home().
+
+return "Hello from Microservice App!"
+
+Returns the text message to the browser.
+
+app.run(host='0.0.0.0', port=5000)
+
+Starts the Flask server:
+
+host='0.0.0.0'
+Allows connections from outside the container.
+port=5000
+Runs the application on port 5000.
+Purpose
+
+This service acts as one microservice responsible for handling web requests.
+
+Step 3: Add Requirements File
+
+Create app/requirements.txt
+
+flask
+Explanation
+
+This file contains all Python libraries required by the application.
+
+Here:
+
+flask
+
+indicates that Flask must be installed.
+
+Purpose
+
+During image creation, Docker reads this file and installs the required dependencies automatically.
+
+Step 4: Create Dockerfile
+
+Create app/Dockerfile
+
+FROM python:3.9
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "app.py"]
+Explanation
+1. Base Image
+FROM python:3.9
+Uses the official Python 3.9 image.
+Provides a Linux environment with Python preinstalled.
+2. Working Directory
+WORKDIR /app
+
+Creates and switches to the /app directory inside the container.
+
+3. Copy Requirements File
+COPY requirements.txt .
+
+Copies the requirements file into the container.
+
+4. Install Dependencies
+RUN pip install -r requirements.txt
+
+Installs Flask and other required packages.
+
+5. Copy Application Files
+COPY . .
+
+Copies all files from the local app directory into the container.
+
+6. Start the Application
+CMD ["python", "app.py"]
+
+Executes:
+
+python app.py
+
+when the container starts.
+
+Purpose
+
+The Dockerfile defines how the Flask application image is built.
+
+Step 5: Add Database Container
+
+Instead of installing MySQL manually, Docker pulls the official MySQL image from Docker Hub.
+
+No custom database code is needed.
+
+Purpose
+
+The database runs independently as another microservice.
+
+Benefits:
+
+Isolation
+Portability
+Easy scaling
+Independent deployment
+Step 6: Create docker-compose.yml
+
+Create docker-compose.yml
+
+version: '3'
+
+services:
+
+  web:
+    build: ./app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sampledb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+Explanation
+version: '3'
+
+Specifies the Docker Compose file format version.
+
+Services Section
+services:
+
+Defines all containers involved in the application.
+
+Here there are two services:
+
+Web service
+Database service
+Web Service
+web:
+
+Represents the Flask application container.
+
+Build
+build: ./app
+
+Builds the Docker image using the Dockerfile inside the app folder.
+
+Port Mapping
+ports:
+  - "5000:5000"
+
+Maps:
+
+Host Machine	Container
+5000	5000
+
+Users can access:
+
+http://localhost:5000
+Dependency
+depends_on:
+  - db
+
+Ensures that the database container starts before the web container.
+
+Database Service
+db:
+
+Represents the MySQL container.
+
+Image
+image: mysql:5.7
+
+Downloads MySQL version 5.7 from Docker Hub.
+
+Restart Policy
+restart: always
+
+Automatically restarts the container if it stops.
+
+Environment Variables
+Database Name
+MYSQL_DATABASE: sampledb
+
+Creates a database named:
+
+sampledb
+Username
+MYSQL_USER: user
+
+Creates a user named:
+
+user
+Password
+MYSQL_PASSWORD: password
+
+Sets password for that user.
+
+Root Password
+MYSQL_ROOT_PASSWORD: rootpass
+
+Sets password for MySQL root user.
+
+Database Port
+ports:
+  - "3306:3306"
+
+Maps MySQL's default port:
+
+Host	Container
+3306	3306
+Purpose
+
+Docker Compose manages multiple containers together using a single configuration file.
+
+Step 7: Run the Application
+Command
+docker-compose up --build
+Explanation
+docker-compose
+
+Invokes Docker Compose.
+
+up
+
+Creates and starts all containers.
+
+--build
+
+Builds the Flask image before starting containers.
+
+Internal Process
+Reads docker-compose.yml.
+Builds Flask image.
+Downloads MySQL image.
+Creates network between containers.
+Starts MySQL container.
+Starts Flask container.
+Purpose
+
+Launches the complete microservice architecture with one command.
+
+Step 8: Test the Application
+
+Open:
+
+http://localhost:5000
+
+Output:
+
+Hello from Microservice App!
+Explanation
+Browser sends request to port 5000.
+Docker forwards request to Flask container.
+Flask executes the home() function.
+Response is returned to the browser.
+Purpose
+
+Verifies that the web microservice is functioning correctly.
+
+Step 9: Verify Running Containers
+Command
+docker ps
+Explanation
+
+Displays all active containers.
+
+Example:
+
+CONTAINER ID   IMAGE       PORTS
+abc123          flask-app  0.0.0.0:5000->5000/tcp
+xyz456          mysql:5.7  0.0.0.0:3306->3306/tcp
+Purpose
+
+Confirms that both services are running:
+
+Flask Web Service
+MySQL Database Service
+Step 10: Shut Down the Setup
+Command
+docker-compose down
+Explanation
+
+Stops and removes:
+
+Flask container
+MySQL container
+Network created by Docker Compose
+Purpose
+
+Safely terminates the entire microservices environment and frees system resources.
+
+Overall Working Flow
+User Browser
+      |
+      v
+localhost:5000
+      |
+      v
+Flask Container (Web Service)
+      |
+      v
+Docker Network
+      |
+      v
+MySQL Container (Database Service)
+
+Thus, the application demonstrates a microservices architecture, where each service runs independently inside its own container and Docker Compose manages communication and deployment between them.
